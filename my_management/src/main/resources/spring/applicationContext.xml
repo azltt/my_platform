@@ -1,0 +1,42 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+
+    <!-- 采用注释的方式配置bean -->
+    <context:annotation-config />
+    <!-- 配置要扫描的包 -->
+    <context:component-scan base-package="com.azl" />
+    <!-- proxy-target-class默认"false",更改为"ture"使用CGLib动态代理 -->
+    <aop:aspectj-autoproxy proxy-target-class="true" />
+    <aop:config proxy-target-class="true" />
+    <!-- 引入属性文件 -->
+    <context:property-placeholder location="classpath:properties/*.properties,classpath:profiles/dev.properties" />
+
+    <!-- 消息处理的功能 -->
+    <!--<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="useCodeAsDefaultMessage" value="true" />
+        <property name="fallbackToSystemLocale" value="false" />
+        <property name="defaultEncoding" value="UTF-8" />
+        <property name="cacheSeconds" value="180000" />
+        <property name="basenames">
+            <list>
+                <value><![CDATA[src/main/resources/i18n/message]]></value>
+            </list>
+        </property>
+    </bean>-->
+
+
+    <import resource="classpath:mybatis/spring-mybatis.xml" />
+    <!--<import resource="classpath:shiro/spring-shiro.xml" />
+    <import resource="classpath:spring/redis.xml" />
+    <import resource="classpath:dubbo/dubbo.xml" />
+    <import resource="classpath:orientDB/orientDB.xml" />-->
+    <!-- <import resource="classpath:mybatis/dataSource.xml" /> -->
+	
+
+</beans>

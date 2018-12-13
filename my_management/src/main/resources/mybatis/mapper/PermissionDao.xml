@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.azl.mapper.PermissionDao">
+  <resultMap id="BaseResultMap" type="com.azl.pojo.Permission">
+    <id column="permit_id" jdbcType="INTEGER" property="permitId" />
+    <result column="permit_url" jdbcType="VARCHAR" property="permitUrl" />
+    <result column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="permit_name" jdbcType="VARCHAR" property="permitName" />
+    <result column="Reserved_1" jdbcType="VARCHAR" property="reserved1" />
+    <result column="Reserved_2" jdbcType="VARCHAR" property="reserved2" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    permit_id, permit_url, role_id, permit_name, Reserved_1, Reserved_2
+  </sql>
+  <select id="selectByExample" parameterType="com.azl.pojo.PermissionExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from permission
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from permission
+    where permit_id = #{permitId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from permission
+    where permit_id = #{permitId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.azl.pojo.PermissionExample">
+    delete from permission
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="permit_id" keyProperty="permitId" parameterType="com.azl.pojo.Permission" useGeneratedKeys="true">
+    insert into permission (permit_url, role_id, permit_name, 
+      Reserved_1, Reserved_2)
+    values (#{permitUrl,jdbcType=VARCHAR}, #{roleId,jdbcType=INTEGER}, #{permitName,jdbcType=VARCHAR}, 
+      #{reserved1,jdbcType=VARCHAR}, #{reserved2,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="permit_id" keyProperty="permitId" parameterType="com.azl.pojo.Permission" useGeneratedKeys="true">
+    insert into permission
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="permitUrl != null">
+        permit_url,
+      </if>
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="permitName != null">
+        permit_name,
+      </if>
+      <if test="reserved1 != null">
+        Reserved_1,
+      </if>
+      <if test="reserved2 != null">
+        Reserved_2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="permitUrl != null">
+        #{permitUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="permitName != null">
+        #{permitName,jdbcType=VARCHAR},
+      </if>
+      <if test="reserved1 != null">
+        #{reserved1,jdbcType=VARCHAR},
+      </if>
+      <if test="reserved2 != null">
+        #{reserved2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.azl.pojo.PermissionExample" resultType="java.lang.Long">
+    select count(*) from permission
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update permission
+    <set>
+      <if test="record.permitId != null">
+        permit_id = #{record.permitId,jdbcType=INTEGER},
+      </if>
+      <if test="record.permitUrl != null">
+        permit_url = #{record.permitUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roleId != null">
+        role_id = #{record.roleId,jdbcType=INTEGER},
+      </if>
+      <if test="record.permitName != null">
+        permit_name = #{record.permitName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reserved1 != null">
+        Reserved_1 = #{record.reserved1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reserved2 != null">
+        Reserved_2 = #{record.reserved2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update permission
+    set permit_id = #{record.permitId,jdbcType=INTEGER},
+      permit_url = #{record.permitUrl,jdbcType=VARCHAR},
+      role_id = #{record.roleId,jdbcType=INTEGER},
+      permit_name = #{record.permitName,jdbcType=VARCHAR},
+      Reserved_1 = #{record.reserved1,jdbcType=VARCHAR},
+      Reserved_2 = #{record.reserved2,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azl.pojo.Permission">
+    update permission
+    <set>
+      <if test="permitUrl != null">
+        permit_url = #{permitUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="permitName != null">
+        permit_name = #{permitName,jdbcType=VARCHAR},
+      </if>
+      <if test="reserved1 != null">
+        Reserved_1 = #{reserved1,jdbcType=VARCHAR},
+      </if>
+      <if test="reserved2 != null">
+        Reserved_2 = #{reserved2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where permit_id = #{permitId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azl.pojo.Permission">
+    update permission
+    set permit_url = #{permitUrl,jdbcType=VARCHAR},
+      role_id = #{roleId,jdbcType=INTEGER},
+      permit_name = #{permitName,jdbcType=VARCHAR},
+      Reserved_1 = #{reserved1,jdbcType=VARCHAR},
+      Reserved_2 = #{reserved2,jdbcType=VARCHAR}
+    where permit_id = #{permitId,jdbcType=INTEGER}
+  </update>
+</mapper>

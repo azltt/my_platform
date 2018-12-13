@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:task="http://www.springframework.org/schema/task" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans   
+          http://www.springframework.org/schema/beans/spring-beans-4.0.xsd   
+           http://www.springframework.org/schema/context   
+           http://www.springframework.org/schema/context/spring-context-4.0.xsd  
+           http://www.springframework.org/schema/tx 
+           http://www.springframework.org/schema/tx/spring-tx-4.0.xsd 
+           http://www.springframework.org/schema/aop   
+           http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+           http://www.springframework.org/schema/task 
+           http://www.springframework.org/schema/task/spring-task-4.0.xsd ">
+
+	<bean id="parentPoolProperties" class="org.apache.tomcat.jdbc.pool.PoolProperties">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="initialSize" value="${jdbc.initialSize}" />
+		<property name="maxActive" value="${jdbc.maxActive}" />
+		<property name="minIdle" value="${jdbc.minIdle}" />
+		<property name="maxIdle" value="${jdbc.maxIdle}" />
+		<property name="maxWait" value="${jdbc.maxWait}" />
+		<property name="testWhileIdle" value="${jdbc.testWhileIdle}" />
+		<property name="testOnBorrow" value="${jdbc.testOnBorrow}" />
+		<property name="testOnReturn" value="${jdbc.testOnReturn}" />
+		<property name="validationInterval" value="${jdbc.validationInterval}" />
+		<property name="validationQuery" value="${jdbc.validationQuery}" />
+		<property name="timeBetweenEvictionRunsMillis" value="${jdbc.timeBetweenEvictionRunsMillis}" />
+		<property name="removeAbandonedTimeout" value="${jdbc.removeAbandonedTimeout}" />
+		<property name="minEvictableIdleTimeMillis" value="${jdbc.minEvictableIdleTimeMillis}" />
+		<property name="logAbandoned" value="${jdbc.logAbandoned}" />
+		<property name="removeAbandoned" value="${jdbc.removeAbandoned}" />
+		<property name="jdbcInterceptors" value="${jdbc.jdbcInterceptors}" />
+	</bean>
+	
+	<!--mysql constant database config -->
+	<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+		<property name="poolProperties">
+			<bean parent="parentPoolProperties">
+				<property name="url" value="${jdbc.url}" />
+				<property name="username" value="${jdbc.username}" />
+				<property name="password" value="${jdbc.password}" />
+			</bean>
+		</property>
+	</bean>
+
+	<!--database two  game_operation  配置第二个数据源--><!--注释第二数据库-->
+	<!--<bean id="dataSourceTwo" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+		<property name="poolProperties">
+			<bean parent="parentPoolProperties">
+				<property name="url" value="${jdbc.url.two}" />
+				<property name="username" value="${jdbc.username.two}" />
+				<property name="password" value="${jdbc.password.two}" />
+			</bean>
+		</property>
+	</bean>-->
+	
+	<!-- 数据库连接池 --> 
+	<bean id="dynamicDataSource" class="com.azl.utils.DynamicDataSource">
+        <property name="targetDataSources">
+            <map key-type="java.lang.String">
+                <entry value-ref="dataSource" key="dataSource" />
+				<!--注释第二数据库-->
+                <!--<entry value-ref="dataSourceTwo" key="dataSourceTwo" />-->
+            </map>
+        </property>
+        <!-- 默认使用productDataSource的数据源 -->
+        <property name="defaultTargetDataSource" ref="dataSource" />
+    </bean>
+	
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.azl.mapper" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean>
+
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dynamicDataSource"/>
+	</bean>
+	<!-- 原来的配置（2017/10/16）
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean> -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dynamicDataSource" /><!-- dataSource -->
+		<property name="configLocation" value="classpath:mybatis/mybatis.xml" />
+		<property name="typeAliasesPackage" value="com.azl.pojo" />
+		<property name="mapperLocations" value="classpath:mybatis/mapper/**/*.xml" />
+	</bean>
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+</beans>
