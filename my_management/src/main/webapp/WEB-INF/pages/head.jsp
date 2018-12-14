@@ -34,7 +34,7 @@
                 Activity Log
               </a>--%>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">
+              <a class="dropdown-item" href="${pageContext.request.contextPath}/mymanagement/logout">
                 <i class="mdi mdi-logout mr-2 text-primary"></i>
                 注销
               </a>

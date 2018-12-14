@@ -32,8 +32,8 @@
 
 
     <import resource="classpath:mybatis/spring-mybatis.xml" />
-    <!--<import resource="classpath:shiro/spring-shiro.xml" />
-    <import resource="classpath:spring/redis.xml" />
+    <import resource="classpath:shiro/spring-shiro.xml" />
+    <!--<import resource="classpath:spring/redis.xml" />
     <import resource="classpath:dubbo/dubbo.xml" />
     <import resource="classpath:orientDB/orientDB.xml" />-->
     <!-- <import resource="classpath:mybatis/dataSource.xml" /> -->
