@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.azl.utils.VerifyCodeUtil;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.logging.log4j.LogManager;
@@ -32,7 +33,7 @@ public class LoginOrOutController {
 	/**
 	 * 获取验证码图片和文本(验证码文本会保存在HttpSession中)
 	 */
-	/*@RequestMapping("/getVerifyCodeImage")
+	@RequestMapping("/getVerifyCodeImage")
 	public void getVerifyCodeImage(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		// 设置页面不缓存
 		response.setHeader("Pragma", "no-cache");
@@ -48,7 +49,7 @@ public class LoginOrOutController {
 				Color.BLACK, null);
 		// 写给浏览器
 		ImageIO.write(bufferedImage, "JPEG", response.getOutputStream());
-	}*/
+	}
 
 	/**
 	 * 用户登录
@@ -57,27 +58,26 @@ public class LoginOrOutController {
 	public String login(HttpServletRequest request) {
 		log.info("用户登录");
 		String exceptionClassName = (String) request.getAttribute("shiroLoginFailure");
-//		if(exceptionClassName==null){
-//			return "system/login";
-//		}
+		if(exceptionClassName==null){
+			return "system/login";
+		}
 		String resultPageURL = InternalResourceViewResolver.FORWARD_URL_PREFIX + "/";
 		String username = request.getParameter("managername");
 		String password = request.getParameter("password");
-
 		//获取HttpSession中的验证码
-//		String verifyCode = (String)request.getSession().getAttribute("verifyCode");
+		String verifyCode = (String)request.getSession().getAttribute("verifyCode");
 		//获取用户请求表单中输入的验证码
-//		String submitCode = WebUtils.getCleanParam(request, "verifyCode");
-//		System.out.println("用户[" + username + "]登录时输入的验证码为[" + submitCode + "],HttpSession中的验证码为[" + verifyCode + "]");
+		String submitCode = WebUtils.getCleanParam(request, "verifyCode");
+		System.out.println("用户[" + username + "]登录时输入的验证码为[" + submitCode + "],HttpSession中的验证码为[" + verifyCode + "]");
 
 		/*if (StringUtils.isEmpty(submitCode) || !StringUtils.equals(verifyCode, submitCode.toLowerCase())){
 			request.setAttribute("message_login", "验证码不正确");
 			return "login";
 		}*/
-//		if(exceptionClassName!=null && exceptionClassName.startsWith("验证码错误")){
-//			request.setAttribute("message_login", "验证码不正确");
-//			return "login";
-//		}
+		if(exceptionClassName!=null && exceptionClassName.startsWith("验证码错误")){
+			request.setAttribute("message_login", "验证码不正确");
+			return "system/login";
+		}
 		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
 		token.setRememberMe(true);
 		System.out.println("为了验证登录用户而封装的token为" + ReflectionToStringBuilder.toString(token, ToStringStyle.MULTI_LINE_STYLE));
@@ -90,7 +90,7 @@ public class LoginOrOutController {
 			System.out.println("对用户[" + username + "]进行登录验证..验证开始");
 			currentUser.login(token);
 			System.out.println("对用户[" + username + "]进行登录验证..验证通过");
-			resultPageURL = "redirect:/tohome";
+			resultPageURL = "index";
 		}catch(UnknownAccountException uae){
 			System.out.println("对用户[" + username + "]进行登录验证..验证未通过,未知账户");
 			request.setAttribute("message_login", "未知账户");
@@ -110,8 +110,7 @@ public class LoginOrOutController {
 		}catch(AuthenticationException ae){
 			//通过处理Shiro的运行时AuthenticationException就可以控制用户登录失败或密码错误时的情景
 			System.out.println("对用户[" + username + "]进行登录验证..验证未通过,堆栈轨迹如下");
-//			ae.printStackTrace();
-			log.error("未知错误");
+			ae.printStackTrace();
 			request.setAttribute("message_login", "用户名或密码不正确");
 			resultPageURL = "system/login";
 		}

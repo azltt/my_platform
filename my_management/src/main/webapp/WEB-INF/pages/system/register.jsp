@@ -34,40 +34,42 @@
               <div class="brand-logo">
                 <img src="${pageContext.request.contextPath}/images/logo.svg">
               </div>
-              <h4>Hello! let's get started</h4>
-              <h4> ${message_login}</h4>
-              <h6 class="font-weight-light">Sign in to continue.</h6>
-              <form class="pt-3" method="post" id="login_form">
+              <h4>New here?</h4>
+              <h4>${register_msg}</h4>
+              <h6 class="font-weight-light">Signing up is easy. It only takes a few steps</h6>
+              <form class="pt-3" method="post" id="register_form">
                 <div class="form-group">
-                  <input type="email" class="form-control form-control-lg" id="exampleInputEmail1" placeholder="Username" name="managername">
+                  <input type="text" class="form-control form-control-lg" id="exampleInputUsername1" placeholder="Username" name="managerName">
                 </div>
+                <%--<div class="form-group">
+                  <input type="email" class="form-control form-control-lg" id="exampleInputEmail1" placeholder="Email" name="password">
+                </div>--%>
+                <%--<div class="form-group">
+                  <select class="form-control form-control-lg" id="exampleFormControlSelect2">
+                    <option>游客</option>
+                    <option>United States of America</option>
+                    <option>United Kingdom</option>
+                    <option>India</option>
+                    <option>Germany</option>
+                    <option>Argentina</option>
+                  </select>
+                </div>--%>
                 <div class="form-group">
                   <input type="password" class="form-control form-control-lg" id="exampleInputPassword1" placeholder="Password" name="password">
                 </div>
-                <div class="form-group">
-                  <input type="verifyCode" class="form-control form-control-lg" id="exampleverifyCode" placeholder="验证码" name="verifyCode">
-                  <img class="rcCaptcha-btn rcCaptcha-img" id="verifyCodeImage" src="${pageContext.request.contextPath}/mymanagement/getVerifyCodeImage" />
-                </div>
-                <div class="mt-3">
-                  <a class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn" onclick="test_post('login_form','${pageContext.request.contextPath}/mymanagement/dologin')" >SIGN IN</a>
-                  <%--<a class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn"  href="${pageContext.request.contextPath}/mymanagement/dologin" >SIGN IN</a>--%>
-                </div>
-                <div class="my-2 d-flex justify-content-between align-items-center">
+                <div class="mb-4">
                   <div class="form-check">
                     <label class="form-check-label text-muted">
                       <input type="checkbox" class="form-check-input">
-                      Keep me signed in
+                      I agree to all Terms & Conditions
                     </label>
                   </div>
-                  <a href="#" class="auth-link text-black">Forgot password?</a>
                 </div>
-                <div class="mb-2">
-                  <button type="button" class="btn btn-block btn-facebook auth-form-btn">
-                    <i class="mdi mdi-facebook mr-2"></i>Connect using facebook
-                  </button>
+                <div class="mt-3">
+                  <a class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn"  onclick="test_post('register_form','${pageContext.request.contextPath}/management/doregister')">注 册</a>
                 </div>
                 <div class="text-center mt-4 font-weight-light">
-                  Don't have an account? <a href="${pageContext.request.contextPath}/toregister" class="text-primary">Create</a>
+                  已经有一个账号? <a href="${pageContext.request.contextPath}/tologin" class="text-primary">登 录</a>
                 </div>
               </form>
             </div>
@@ -88,24 +90,6 @@
   <script src="${pageContext.request.contextPath}/js/misc.js"></script>
   <!-- endinject -->
   <script src="${pageContext.request.contextPath}/js/common.js"></script>
-  <%--<script>
-      function test_post(url) {
-          var testform=document.getElementById("testform");
-          testform.action=url;
-          testform.submit();
-      }
-  </script>--%>
-  <script>
-      $(function() {
-          $(".rcCaptcha-btn").click(
-              function() {
-                  $(".rcCaptcha-img").attr(
-                      "src",
-                      '${pageContext.request.contextPath}/mymanagement/getVerifyCodeImage?'
-                      + new Date().getTime());
-              });
-      });
-  </script>
 </body>
 
 </html>

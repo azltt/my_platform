@@ -27,6 +27,12 @@ public class HomeController extends BaseController {
         model.addAttribute("childMenus",childMenu);
         return "index";
     }
+
+    @RequestMapping("/toregister")
+    public String toRegister(HttpServletRequest req, Model model) {
+        return "system/register";
+    }
+
     /**
      * 函数功能说明 ： 登陆后台管理系统. 修改者名字： 修改日期： 修改内容：
      *
@@ -36,14 +42,16 @@ public class HomeController extends BaseController {
      * @return String
      * @throws
      */
-    @RequestMapping("/")
+    @RequestMapping("/tologin")
     public String index(HttpServletRequest req, Model model) {
         log.info("url:::::::::::/");
         Manager pmsOperator = (Manager) this.getSession().getAttribute("currentUser");
-        log.info(pmsOperator.toString());
-        if(pmsOperator!=null){
+
+        if(pmsOperator==null){
+            log.info("无人登录");
             return "system/login";
         }else{
+            log.info(pmsOperator.toString());
             return "redirect:/tohome";
         }
        /* try {

@@ -50,22 +50,45 @@
 		<property name="arguments" ref="securityManager" />
 	</bean>
 
+	<!--20181214 azl start-->
+	<!-- 基于Form表单的身份验证过滤器，为了控制验证码 -->
+	<bean id="authcFilter"
+		  class="com.azl.permission.shiro.filter.RcFormAuthenticationFilter">
+		<!-- from表达提交参数的属性命名 -->
+		<property name="usernameParam" value="managername" />
+		<property name="passwordParam" value="password" />
+		<property name="rememberMeParam" value="rememberMe" />
+		<property name="loginUrl" value="/mymanagement/dologin" />
+		<property name="failureKeyAttribute"
+				  value="shiroLoginFailure" />
+	</bean>
+
+	<!-- 验证码验证过滤器 -->
+	<bean id="rcCaptchaValidateFilter"
+		  class="com.azl.permission.shiro.filter.RcCaptchaValidateFilter">
+		<property name="captchaEbabled" value="true" />
+		<property name="captchaParam" value="verifyCode" /><!-- 页面的参数名 -->
+		<property name="failureKeyAttribute"
+				  value="shiroLoginFailure" />
+	</bean>
+	<!--20181214 azl end-->
+
 	<!-- Shiro主过滤器本身功能十分强大,其强大之处就在于它支持任何基于URL路径表达式的、自定义的过滤器的执行 -->
 	<!-- Web应用中,Shiro可控制的Web请求必须经过Shiro主过滤器的拦截,Shiro对基于Spring的Web应用提供了完美的支持 -->
 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager" />
 		<!-- 登录controller的mapper地址 -->
-		<property name="loginUrl" value="/mymanagement/dologin" />
+		<property name="loginUrl" value="/tologin" />
 		<!-- 配置我们在登录页登录成功后的跳转地址，如果你访问的是非/login地址，则跳到您访问的地址 -->
-		<property name="successUrl" value="/user"/>
+		<property name="successUrl" value="/tohome"/>
 		<!-- 如果您请求的资源不再您的权限范围，则跳转到/403请求地址 -->
 		<property name="unauthorizedUrl" value="/system/unauthorized.jsp" />
-		<!--<property name="filters">
+		<property name="filters">
 			<util:map>
 				<entry key="authc" value-ref="authcFilter" />
 				<entry key="rcCaptchaValidate" value-ref="rcCaptchaValidateFilter" />
 			</util:map>
-		</property>-->
+		</property>
 		<property name="filterChainDefinitions">
 			<value>
 				<!-- Shiro的Web过滤器 -->
@@ -77,11 +100,13 @@
 				/fonts/** = anon
 				/PSD/** = anon
 				/vendors/** = anon
-				/system/login.jsp = anon
-				<!--/mydemo/getVerifyCodeImage = anon-->
+                /toregister = anon
+				/management/doregister = anon
+				/tologin = anon
+				/mymanagement/getVerifyCodeImage = anon
 				<!-- /mymall/login = anon -->
-				<!--/mymanagement/dologin = rcCaptchaValidate,authc-->
-				/mymanagement/dologin = authc
+				/mymanagement/dologin = rcCaptchaValidate,authc
+				<!--/mymanagement/dologin = authc-->
 				/mymanagement/logout = logout
 				/** = authc
 			</value>
