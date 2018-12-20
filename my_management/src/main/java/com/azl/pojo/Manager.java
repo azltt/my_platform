@@ -13,6 +13,8 @@ public class Manager implements Serializable {
 
     private String password;
 
+    private String salt;
+
     private String phone;
 
     private String email;
@@ -49,6 +51,14 @@ public class Manager implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     public String getPhone() {
@@ -114,6 +124,7 @@ public class Manager implements Serializable {
         return (this.getManagerId() == null ? other.getManagerId() == null : this.getManagerId().equals(other.getManagerId()))
             && (this.getManagerName() == null ? other.getManagerName() == null : this.getManagerName().equals(other.getManagerName()))
             && (this.getPassword() == null ? other.getPassword() == null : this.getPassword().equals(other.getPassword()))
+            && (this.getSalt() == null ? other.getSalt() == null : this.getSalt().equals(other.getSalt()))
             && (this.getPhone() == null ? other.getPhone() == null : this.getPhone().equals(other.getPhone()))
             && (this.getEmail() == null ? other.getEmail() == null : this.getEmail().equals(other.getEmail()))
             && (this.getNickName() == null ? other.getNickName() == null : this.getNickName().equals(other.getNickName()))
@@ -129,6 +140,7 @@ public class Manager implements Serializable {
         result = prime * result + ((getManagerId() == null) ? 0 : getManagerId().hashCode());
         result = prime * result + ((getManagerName() == null) ? 0 : getManagerName().hashCode());
         result = prime * result + ((getPassword() == null) ? 0 : getPassword().hashCode());
+        result = prime * result + ((getSalt() == null) ? 0 : getSalt().hashCode());
         result = prime * result + ((getPhone() == null) ? 0 : getPhone().hashCode());
         result = prime * result + ((getEmail() == null) ? 0 : getEmail().hashCode());
         result = prime * result + ((getNickName() == null) ? 0 : getNickName().hashCode());
@@ -147,6 +159,7 @@ public class Manager implements Serializable {
         sb.append(", managerId=").append(managerId);
         sb.append(", managerName=").append(managerName);
         sb.append(", password=").append(password);
+        sb.append(", salt=").append(salt);
         sb.append(", phone=").append(phone);
         sb.append(", email=").append(email);
         sb.append(", nickName=").append(nickName);

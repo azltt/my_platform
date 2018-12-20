@@ -31,8 +31,8 @@ public class OperatorRealm extends AuthorizingRealm {
         System.out.println("验证当前Subject时获取到token为" + ReflectionToStringBuilder.toString(token, ToStringStyle.MULTI_LINE_STYLE));
         Manager manager = managerService.getByUsername(token.getUsername());
         if(null != manager){
-            AuthenticationInfo authcInfo = new SimpleAuthenticationInfo(manager.getManagerName(), manager.getPassword(),/* ByteSource.Util.bytes(manager.getCredentialsSalt()),*/getName());
-            new SimpleAuthenticationInfo();
+            AuthenticationInfo authcInfo = new SimpleAuthenticationInfo(manager.getManagerName(), manager.getPassword(), ByteSource.Util.bytes(manager.getSalt()),getName());
+//            new SimpleAuthenticationInfo();
             // salt=username+salt
             this.setSession("currentUser", manager);
             return authcInfo;

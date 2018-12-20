@@ -1,26 +1,20 @@
-package com.azl;
+package com.azl.utils;
 
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
 
-import java.sql.SQLOutput;
 import java.util.Random;
-import java.util.UUID;
 
-public class md5 {
-    public static void main(String[] args) {
+public class BaseUtil {
+    public static String getMd5(String credentials,String salt){
         String hashAlgorithmName = "MD5";
         //需要加密的字符串
-        String credentials = "admin";
+//        String credentials = "admin";
         int hashIterations = 2;
-        ByteSource credentialsSalt = ByteSource.Util.bytes("admin");
+        ByteSource credentialsSalt = ByteSource.Util.bytes(salt);
         Object obj = new SimpleHash(hashAlgorithmName, credentials, credentialsSalt, hashIterations);
         System.out.println(obj);
-
-        String Str1= UUID.randomUUID().toString().replace("-", "");
-        System.out.println(Str1);
-        System.out.println(getRandomString(8));
-        System.out.println(getRandomString2(8));
+        return obj.toString();
     }
 
     /**
@@ -78,4 +72,5 @@ public class md5 {
         }
         return sb.toString();
     }
+
 }

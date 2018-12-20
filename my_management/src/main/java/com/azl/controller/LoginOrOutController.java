@@ -18,6 +18,7 @@ import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.util.WebUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
@@ -55,72 +56,53 @@ public class LoginOrOutController {
 	 * 用户登录
 	 */
 	@RequestMapping(value = "/dologin")
-	public String login(HttpServletRequest request) {
-		log.info("用户登录");
+	public String login(HttpServletRequest request, Model model) {
+
 		String exceptionClassName = (String) request.getAttribute("shiroLoginFailure");
-		if(exceptionClassName==null){
-			return "system/login";
-		}
-		String resultPageURL = InternalResourceViewResolver.FORWARD_URL_PREFIX + "/";
+
 		String username = request.getParameter("managername");
-		String password = request.getParameter("password");
-		//获取HttpSession中的验证码
-		String verifyCode = (String)request.getSession().getAttribute("verifyCode");
-		//获取用户请求表单中输入的验证码
+		// 获取HttpSession中的验证码
+		String verifyCode = (String) request.getSession().getAttribute("verifyCode");
+		// 获取用户请求表单中输入的验证码
 		String submitCode = WebUtils.getCleanParam(request, "verifyCode");
 		System.out.println("用户[" + username + "]登录时输入的验证码为[" + submitCode + "],HttpSession中的验证码为[" + verifyCode + "]");
-
-		/*if (StringUtils.isEmpty(submitCode) || !StringUtils.equals(verifyCode, submitCode.toLowerCase())){
+		/*
+		 * if (StringUtils.isEmpty(submitCode) || !StringUtils.equals(verifyCode,
+		 * submitCode.toLowerCase())){ request.setAttribute("message_login", "验证码不正确");
+		 * return "login"; }
+		 */
+		/*if (exceptionClassName != null && exceptionClassName.startsWith("验证码错误")) {
 			request.setAttribute("message_login", "验证码不正确");
 			return "login";
 		}*/
-		if(exceptionClassName!=null && exceptionClassName.startsWith("验证码错误")){
-			request.setAttribute("message_login", "验证码不正确");
-			return "system/login";
-		}
-		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-		token.setRememberMe(true);
-		System.out.println("为了验证登录用户而封装的token为" + ReflectionToStringBuilder.toString(token, ToStringStyle.MULTI_LINE_STYLE));
-		//获取当前的Subject
-		Subject currentUser = SecurityUtils.getSubject();
-		try {
-			//在调用了login方法后,SecurityManager会收到AuthenticationToken,并将其发送给已配置的Realm执行必须的认证检查
-			//每个Realm都能在必要时对提交的AuthenticationTokens作出反应
-			//所以这一步在调用login(token)方法时,它会走到MyRealm.doGetAuthenticationInfo()方法中,具体验证方式详见此方法
-			System.out.println("对用户[" + username + "]进行登录验证..验证开始");
-			currentUser.login(token);
-			System.out.println("对用户[" + username + "]进行登录验证..验证通过");
-			resultPageURL = "index";
-		}catch(UnknownAccountException uae){
+
+		if (UnknownAccountException.class.getName().equals(exceptionClassName)) {
 			System.out.println("对用户[" + username + "]进行登录验证..验证未通过,未知账户");
 			request.setAttribute("message_login", "未知账户");
-			resultPageURL = "system/login";
-		}catch(IncorrectCredentialsException ice){
+		}
+		else if (IncorrectCredentialsException.class.getName().equals(exceptionClassName)) {
 			System.out.println("对用户[" + username + "]进行登录验证..验证未通过,错误的凭证");
 			request.setAttribute("message_login", "密码不正确");
-			resultPageURL = "system/login";
-		}catch(LockedAccountException lae){
+		}
+		else if (LockedAccountException.class.getName().equals(exceptionClassName)) {
 			System.out.println("对用户[" + username + "]进行登录验证..验证未通过,账户已锁定");
 			request.setAttribute("message_login", "账户已锁定");
-			resultPageURL = "system/login";
-		}catch(ExcessiveAttemptsException eae){
+		}
+		else if (ExcessiveAttemptsException.class.getName().equals(exceptionClassName)) {
 			System.out.println("对用户[" + username + "]进行登录验证..验证未通过,错误次数过多");
 			request.setAttribute("message_login", "用户名或密码错误次数过多");
-			resultPageURL = "system/login";
-		}catch(AuthenticationException ae){
-			//通过处理Shiro的运行时AuthenticationException就可以控制用户登录失败或密码错误时的情景
+		}
+		else if (AuthenticationException.class.getName().equals(exceptionClassName)) {
 			System.out.println("对用户[" + username + "]进行登录验证..验证未通过,堆栈轨迹如下");
-			ae.printStackTrace();
 			request.setAttribute("message_login", "用户名或密码不正确");
-			resultPageURL = "system/login";
+		}else if (exceptionClassName != null) {
+			request.setAttribute("message_login", exceptionClassName);
 		}
-		//验证是否登录成功
-		if(currentUser.isAuthenticated()){
-			System.out.println("用户[" + username + "]登录认证通过(这里可以进行一些认证通过后的一些系统参数初始化操作)");
-		}else{
-			token.clear();
-		}
-		return resultPageURL;
+		// 验证是否登录成功
+		 /*if(currentUser.isAuthenticated()){ System.out.println("用户[" + username +
+		 "]登录认证通过(这里可以进行一些认证通过后的一些系统参数初始化操作)"); }else{ token.clear(); }*/
+		return "system/login";
+
 	}
 
 	/**
