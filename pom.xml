@@ -95,7 +95,7 @@
     <libphonenumber.prefixmapper.version>2.86</libphonenumber.prefixmapper.version>
     <libphonenumber.carrier.version>1.76</libphonenumber.carrier.version>
     <jstl.version>1.2</jstl.version>
-    <quartz.version>2.3.0</quartz.version>
+    <quartz.version>2.3.2</quartz.version>
     <orientdb.version>2.2.22</orientdb.version>
     <spring-data-orientdb-graph.version>0.14</spring-data-orientdb-graph.version>
     <dbcp.version>1.4</dbcp.version>
