@@ -81,7 +81,7 @@
     <org.jsoup.version>1.11.2</org.jsoup.version>
     <tscfg-maven-plugin.version>0.2.0</tscfg-maven-plugin.version>
     <tscfg.version>0.8.3</tscfg.version>
-    <commons-io.version>2.5</commons-io.version>
+    <commons-io.version>2.7</commons-io.version>
     <commons-lang.version>2.5</commons-lang.version>
     <com.pentahohub.nexus.version>20150820220052</com.pentahohub.nexus.version>
     <xml-apis.version>1.4.01</xml-apis.version>
