@@ -41,7 +41,7 @@
     <springframework.data.version>1.7.2.RELEASE</springframework.data.version>
     <pagehelper.version>4.1.6</pagehelper.version>
     <fastjson.version>1.2.54</fastjson.version>
-    <httpclient.version>4.5.2</httpclient.version>
+    <httpclient.version>4.5.13</httpclient.version>
     <httpcore.version>4.4.6</httpcore.version>
     <zkclient.version>0.1</zkclient.version>
     <alibaba.dubbo.version>2.5.3</alibaba.dubbo.version>
