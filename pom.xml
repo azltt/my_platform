@@ -78,7 +78,7 @@
     <curator.framework.version>4.0.0</curator.framework.version>
     <com.jfinal.version>3.3</com.jfinal.version>
     <javax.servlet.version>4.0.0</javax.servlet.version>
-    <org.jsoup.version>1.11.2</org.jsoup.version>
+    <org.jsoup.version>1.14.2</org.jsoup.version>
     <tscfg-maven-plugin.version>0.2.0</tscfg-maven-plugin.version>
     <tscfg.version>0.8.3</tscfg.version>
     <commons-io.version>2.5</commons-io.version>
