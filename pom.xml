@@ -36,7 +36,7 @@
     <slf4j-api.version>1.7.25</slf4j-api.version>
     <disruptor.version>3.4.2</disruptor.version>
     <apache.tomcat.version>8.5.35</apache.tomcat.version>
-    <mysql.version>8.0.13</mysql.version>
+    <mysql.version>8.0.28</mysql.version>
     <redis.clients.version>2.9.0</redis.clients.version>
     <springframework.data.version>1.7.2.RELEASE</springframework.data.version>
     <pagehelper.version>4.1.6</pagehelper.version>
